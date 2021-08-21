@@ -6,6 +6,7 @@ from PIL import Image,ImageTk
 from Tools import Tools
 import os,threading,tkinter.filedialog,tkinter.messagebox
 from queue import Queue
+import sys
 
 GetRelXY = lambda x:x/600#相对布局换算默认600x600开始换算
 Tools = Tools()
@@ -14,7 +15,11 @@ class Window():
         self.win = tk.Tk()
         self.win.title("改图宝")
         self.win.geometry("600x600")
-        self.win.iconbitmap(r".\media\tubioa.ico")
+        if sys.platform !="win32":
+            icon = ImageTk.PhotoImage(file="media/tubioa.ico")
+            self.win.tk.call('wm', 'iconphoto', self.win._w, icon)
+        else:
+            self.win.iconbitmap(r"media/tubioa.ico")
         self.win['background']='white'
 
         self.Top_menu = tk.Menu(self.win)
@@ -95,7 +100,7 @@ class Window():
         self.Image_show_Label=tk.Label(self.win,bg='azure',cursor="target")
         self.Image_show_Label.place(relx=GetRelXY(20),rely=GetRelXY(20),relwidth=GetRelXY(250),relheight=GetRelXY(250))
         #显示默认图片
-        self.__selected_image("./media/hello.png")
+        self.__selected_image("media/hello.png")
 
 
 
@@ -277,10 +282,10 @@ class Window():
                    ('SVG', '.svg'), ('ICO', '.ico')]
         fname = tkinter.filedialog.asksaveasfilename(filetypes=HouZhui)
         if fname:
-            if os.path.exists("./media/Out_Image.png"):
+            if os.path.exists("media/Out_Image.png"):
                 print("yws")
-                shutil.copy("./media/Out_Image.png",fname)
-                # with open("./media/Out_Image.png", 'rb') as f:
+                shutil.copy("media/Out_Image.png",fname)
+                # with open("media/Out_Image.png", 'rb') as f:
                 #     with open(fname, 'wb') as f2:
                 #         image1 = f.read()
                 #         f2.write(image1)
@@ -445,7 +450,7 @@ class Window():
         if self._image_select_path:
             self.__selected_image(self._image_select_path)
         else:
-            self.__selected_image("./media/hello.png")
+            self.__selected_image("media/hello.png")
         self.Image_show_Label.place(relx=GetRelXY(20),rely=GetRelXY(20),relwidth=GetRelXY(250),
                                     relheight=GetRelXY(250))
 
